@@ -16,12 +16,22 @@
     <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
         <h1 class="text-2xl font-semibold text-blue-600 mb-6 text-center">LinkedIn Job Time Tool</h1>
         <p class="mb-4 text-gray-700">
-            This tool helps you filter LinkedIn job postings to find those posted within a specific time frame.  It works by modifying the LinkedIn job search URL.
+            This tool helps you filter LinkedIn job postings to find those posted within a specific time frame, adjust the search radius, and sort the results.  It works by modifying the LinkedIn job search URL.
         </p>
 
         <div class="mb-4">
             <label for="linkedin-url" class="block text-gray-700 text-sm font-bold mb-2">LinkedIn Job Search URL:</label>
             <input type="text" id="linkedin-url" placeholder="Paste your LinkedIn Job Search URL here" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label for="search-radius" class="block text-gray-700 text-sm font-bold mb-2">Search Radius (miles):</label>
+            <input type="number" id="search-radius" value="25" placeholder="Enter search radius" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label for="keywords" class="block text-gray-700 text-sm font-bold mb-2">Keywords:</label>
+            <input type="text" id="keywords" placeholder="Enter keywords (e.g., Senior Operations Manager)" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
 
         <div class="mb-6">
@@ -34,6 +44,15 @@
                 <option value="168">Past Week</option>
             </select>
             <p id="time-frame-description" class="mt-2 text-gray-500 text-xs italic">Select the time frame to filter job postings.</p>
+        </div>
+
+        <div class="mb-6">
+            <label for="sort-by" class="block text-gray-700 text-sm font-bold mb-2">Sort By:</label>
+            <select id="sort-by" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="R">Relevance</option>
+                <option value="DD">Date Posted</option>
+            </select>
+            <p id="sort-by-description" class="mt-2 text-gray-500 text-xs italic">Select how you want the job listings to be sorted.</p>
         </div>
 
         <button id="filter-button" class="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -49,13 +68,56 @@
         <ol class="list-decimal list-inside text-gray-600 text-sm">
             <li>Perform a job search on LinkedIn.</li>
             <li>Copy the complete job search URL from your browser's address bar and paste it into the "LinkedIn Job Search URL" field above.</li>
+             <li>Enter the desired search radius in the "Search Radius (miles)" field.</li>
+            <li>Enter the job title or keywords you want to search for in the "Keywords" field.</li>
             <li>Select the desired time frame from the "Filter by Time" dropdown.</li>
+            <li>Select how you want the job listings to be sorted using the "Sort By" dropdown.</li>
             <li>Click the "Filter and Go to LinkedIn" button.</li>
             <li>A new tab will open with the filtered LinkedIn job search results.</li>
         </ol>
         <p class="mt-4 text-gray-500 text-sm">
             <strong>Disclaimer:</strong> This tool modifies the LinkedIn URL to filter job postings.  It relies on LinkedIn's URL structure and may not work if LinkedIn changes its website.  This tool is not affiliated with or endorsed by LinkedIn.  Always verify the job posting date on LinkedIn.
         </p>
+
+        <div class="mt-8 p-4 bg-gray-50 rounded-md border border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">Understanding LinkedIn Search URL Parameters</h3>
+            <p class="text-gray-600 text-sm">
+                Here's a breakdown of the key parameters in a LinkedIn Job Search URL:
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-gray-600 text-sm">
+                <li>
+                    <span class="font-medium">distance</span>: Controls the job search radius in miles. Example: <code class="bg-gray-100 px-1 rounded">distance=50</code> (search within 50 miles).
+                </li>
+                <li>
+                    <span class="font-medium">f_TPR</span>: Filters job postings by recency.
+                    <ul class="list-disc list-inside ml-5 space-y-1">
+                        <li><code class="bg-gray-100 px-1 rounded">r3600</code> - Jobs posted within the last hour.</li>
+                        <li><code class="bg-gray-100 px-1 rounded">r86400</code> - Jobs posted within the last 24 hours.</li>
+                        <li><code class="bg-gray-100 px-1 rounded">r604800</code> - Jobs posted within the last week.</li>
+                        <li><code class="bg-gray-100 px-1 rounded">r2592000</code> - Jobs posted within the last month.</li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="font-medium">geoId</span>: Specifies the geographic location. Example: If searching for jobs in Florida, you need the geoId for Florida.
+                </li>
+                <li>
+                    <span class="font-medium">keywords</span>: Determines the job title or keywords being searched. <code class="bg-gray-100 px-1 rounded">%20</code> represents spaces.
+                    <ul class="list-disc list-inside ml-5">
+                         <li>Example: <code class="bg-gray-100 px-1 rounded">keywords=senior%20operations%20manager</code> (searches for “Senior Operations Manager”).</li>
+                         <li>Example: <code class="bg-gray-100 px-1 rounded">keywords=Director%20of%20Operations</code> (searches for “Director of Operations”).</li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="font-medium">location</span>: Defines the search location. Example: <code class="bg-gray-100 px-1 rounded">location=Florida</code>.
+                </li>
+                <li>
+                    <span class="font-medium">origin</span>: Indicates that the search is being filtered from the job search page. (You can ignore this.)
+                </li>
+                <li>
+                    <span class="font-medium">sortBy</span>: Sorts results. Options: <code class="bg-gray-100 px-1 rounded">R</code> (Relevance), <code class="bg-gray-100 px-1 rounded">DD</code> (Date posted).
+                </li>
+            </ul>
+        </div>
     </div>
 
     <script>
@@ -65,6 +127,9 @@
         const errorMessage = document.getElementById('error-message');
         const successMessage = document.getElementById('success-message');
         const timeFrameDescription = document.getElementById('time-frame-description');
+        const searchRadiusInput = document.getElementById('search-radius');
+        const keywordsInput = document.getElementById('keywords');
+        const sortBySelect = document.getElementById('sort-by');
 
         const timeFrameDescriptions = {
             "24": "Show jobs posted within the past 24 hours.",
@@ -82,6 +147,9 @@
         filterButton.addEventListener('click', function() {
             const url = linkedinUrlInput.value.trim();
             const timeFrame = timeFrameSelect.value;
+            const searchRadius = searchRadiusInput.value.trim();
+            const keywords = keywordsInput.value.trim();
+            const sortBy = sortBySelect.value;
 
             if (!url) {
                 errorMessage.textContent = "Please enter a LinkedIn Job Search URL.";
@@ -92,21 +160,52 @@
 
             let updatedUrl = "";
             const rPosition = url.indexOf("f_TPR=r");
+            const distancePosition = url.indexOf("distance=");
+            const keywordsPosition = url.indexOf("keywords=");
+            const sortByPosition = url.indexOf("sortBy=");
 
+            let timePart = "";
             if (rPosition !== -1) {
                 const ending = url.substring(rPosition + 7);
                 const timeInSeconds = parseInt(timeFrame) * 3600;
-                updatedUrl = url.substring(0, rPosition + 7) + timeInSeconds + ending;
+                timePart = "f_TPR=r" + timeInSeconds;
+                updatedUrl = url.substring(0, rPosition) + timePart + ending;
             } else {
-                 const timeInSeconds = parseInt(timeFrame) * 3600;
-                updatedUrl = url + "&f_TPR=r" + timeInSeconds;
+                const timeInSeconds = parseInt(timeFrame) * 3600;
+                timePart = "&f_TPR=r" + timeInSeconds;
+                updatedUrl = url + timePart;
+            }
+
+            let radiusUrl = "";
+             if (distancePosition !== -1) {
+                const ending = updatedUrl.substring(distancePosition + 9);
+                radiusUrl = updatedUrl.substring(0, distancePosition + 9) + searchRadius + ending;
+            } else {
+                radiusUrl = updatedUrl + "&distance=" + searchRadius;
+            }
+
+            let keywordUrl = "";
+            let encodedKeywords = encodeURIComponent(keywords);
+            if (keywordsPosition !== -1) {
+                const ending = radiusUrl.substring(keywordsPosition + 9);
+                keywordUrl = radiusUrl.substring(0, keywordsPosition + 9) + encodedKeywords + ending;
+            } else {
+                keywordUrl = radiusUrl + "&keywords=" + encodedKeywords;
+            }
+
+            let finalUrl = "";
+            if (sortByPosition !== -1) {
+                const ending = keywordUrl.substring(sortByPosition + 7);
+                finalUrl = keywordUrl.substring(0, sortByPosition + 7) + sortBy + ending;
+            } else {
+                finalUrl = keywordUrl + "&sortBy=" + sortBy;
             }
 
             try {
-                new URL(updatedUrl);
+                new URL(finalUrl);
                 successMessage.textContent = "Opening filtered job search in a new tab...";
                 successMessage.style.display = "block";
-                window.open(updatedUrl, '_blank');
+                window.open(finalUrl, '_blank');
             } catch (_) {
                 errorMessage.textContent = "Invalid URL. Please enter a valid LinkedIn Job Search URL.";
                 errorMessage.style.display = "block";
